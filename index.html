@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAN Services Portal</title>
+    <style>
+        /* Responsive styling */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        form { max-width: 600px; margin: auto; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>PAN Services Portal</h1>
+    <form id="panForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <div id="emailError" class="error"></div>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required>
+        <div id="phoneError" class="error"></div>
+
+        <label for="paymentQR">Payment QR:</label>
+        <input type="text" id="paymentQR" name="paymentQR" required>
+        <div id="qrError" class="error"></div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Form validation
+        const form = document.getElementById('panForm');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const qrInput = document.getElementById('paymentQR');
+
+        // Email validation
+        emailInput.addEventListener('input', function() {
+            const emailError = document.getElementById('emailError');
+            if (!emailInput.validity.valid) {
+                emailError.textContent = 'Please enter a valid email address.';
+            } else {
+                emailError.textContent = '';
+            }
+        });
+
+        // Phone validation
+        phoneInput.addEventListener('input', function() {
+            const phoneError = document.getElementById('phoneError');
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phoneInput.value)) {
+                phoneError.textContent = 'Please enter a valid 10-digit phone number.';
+            } else {
+                phoneError.textContent = '';
+            }
+        });
+
+        // QR code validation
+        qrInput.addEventListener('input', function() {
+            const qrError = document.getElementById('qrError');
+            if (qrInput.value.trim() === '') {
+                qrError.textContent = 'QR code cannot be empty.';
+            } else {
+                qrError.textContent = '';
+            }
+        });
+
+        // Save draft in local storage
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from being submitted
+            localStorage.setItem('email', emailInput.value);
+            localStorage.setItem('phone', phoneInput.value);
+            localStorage.setItem('paymentQR', qrInput.value);
+            alert('Draft saved!');
+        });
+
+        // Load draft from local storage
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('email')) {
+                emailInput.value = localStorage.getItem('email');
+            }
+            if (localStorage.getItem('phone')) {
+                phoneInput.value = localStorage.getItem('phone');
+            }
+            if (localStorage.getItem('paymentQR')) {
+                qrInput.value = localStorage.getItem('paymentQR');
+            }
+        });
+    </script>
+</body>
+</html>
